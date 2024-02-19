@@ -4,6 +4,7 @@ import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -23,35 +24,37 @@ public class ViewGameBoard extends Application
 
     public static void main(String[] args)
     {
-        // TODO: launch the app
+        launch(args);
     }
 
     public void updateHeader() {
-        //TODO update labels
-        //"Fish: " + controller.modelGameBoard.getFishRemaining()
-        //"Bait: " + controller.modelGameBoard.getGuessesRemaining()
+        fishRemaining.setText("Fish: " + controller.modelGameBoard.getFishRemaining());
+        guessesRemaining.setText("Bait: " + controller.modelGameBoard.getGuessesRemaining());
         if(controller.fishWin()) {
-            System.out.println("Fishes win!");
+            message.setText("Fishes win!");
         } else if(controller.playerWins()) {
-            System.out.println("You win!");
+            message.setText("You win!");
         } else {
-            System.out.println("Find the fish!");
+            message.setText("Find the fish!");
         }
     }
     @Override
     public void start(Stage stage) throws Exception {
         controller = new ControllerGameBoard();
-        // TODO initialize gameCanvas
+        gameCanvas = new Canvas();
 
         fishRemaining = new GameBoardLabel();
         guessesRemaining = new GameBoardLabel();
         message = new GameBoardLabel();
 
-        // TODO display game there are infinite ways to do this, I used BorderPane with HBox and VBox.
+        BorderPane layout = new BorderPane();
+        HBox header = new HBox();
+        header.getChildren().addAll(fishRemaining,guessesRemaining, message);
+        VBox columnContainer = new VBox(6);
+        layout.setTop(header);
         updateHeader();
-
         for (int row=0; row < ModelGameBoard.DIMENSION; row++) {
-            // TODO: create row container
+            HBox rowContainer = new HBox(6);
             for (int col=0; col < ModelGameBoard.DIMENSION; col++) {
                 GameBoardButton button = new GameBoardButton(row, col, controller.modelGameBoard.fishAt(row,col));
                 int finalRow = row;
@@ -63,11 +66,16 @@ public class ViewGameBoard extends Application
                         updateHeader();
                     }
                 });
-                // TODO: add button to row
+                rowContainer.getChildren().add(button);
             }
-            // TODO: add row to column
+            columnContainer.getChildren().add(rowContainer);
         }
 
-        // TODO: create scene, stage, set title, and show
+        layout.setCenter(columnContainer);
+
+        Scene scene = new Scene(layout);
+        stage.setScene(scene);
+        stage.setTitle("Gone Fishing");
+        stage.show();
     }
 }
