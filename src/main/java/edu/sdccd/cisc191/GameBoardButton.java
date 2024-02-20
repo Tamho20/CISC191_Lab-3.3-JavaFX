@@ -18,6 +18,9 @@ public class GameBoardButton extends Button {
         this.hasFish = hasFish;
 
         // TODO: set min/pref width, default text
+        setMinWidth(60);
+        setPrefWidth(60);
+        setText("?");
 
     }
 
@@ -25,8 +28,10 @@ public class GameBoardButton extends Button {
         // TODO: update text
         if(hasFish) {
             // TODO "<><"
+            setText("<><");
         } else {
             // TODO "X"
+            setText("X");
         }
         isGuessed = true;
         setDisabled(true);

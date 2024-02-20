@@ -70,7 +70,6 @@ public class ModelGameBoard
         return guessesRemaining;
     }
 
-    public int getFishRemaining()
-    {
+    public int getFishRemaining() {
         return fishRemaining;
-    }
+    }}
